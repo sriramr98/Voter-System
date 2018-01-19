@@ -1,21 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
 
 <div class="container">
 
   <div class="row">
-
+    {% for voter in voters %}
     <div class="col-lg-4 col-md-4 col-sm-6">
       <div class="card">
         <div class="card-body">
-          <div class="card-title">Coke vs Pepsi</div>
+          <div class="card-title">{{voter.voter_one}} vs {{voter.voter_two}}</div>
           <div class="card-text">
-            <div id="first">Coke : 24</div>
-            <div id="second">Pepsi: 26</div>
-            <div id="winner">Winner : Pepsi</div>
+            <div id="first">{{voter.voter_one}}: {{voter.voter_one_count}}</div>
+            <div id="second">{{voter.voter_two}}: {{voter.voter_two_count}}</div>
+            <div id="winner">Winner :
+              {% if voter.voter_one_count > voter.voter_two_count %}
+              {{voter.voter_one}}
+              {% else %}
+              {{voter.voter_two}}
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
     </div>
-
+    {% endfor %}
   </div>
 
 </div>
+
+{% endblock %}

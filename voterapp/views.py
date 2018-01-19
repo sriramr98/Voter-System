@@ -12,7 +12,6 @@ def index(request):
     context = {'votes':votes}
     return render(request,'index.html',context=context)
 
-
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -60,3 +59,55 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def add_new_voter(request):
+    context = {}
+    if request.method == 'POST':
+        desc = request.POST.get('voteDesc')
+        voterOne = request.POST.get('voterOne')
+        voterTwo = request.POST.get('voterTwo')
+        currentUser = request.user
+        voter = Voter.objects.create(description = desc, voter_one= voterOne, voter_two=voterTwo,user=currentUser)
+        context = {'success': 'Saved successfully.'}
+    return render(request,'add_voter.html',context=context)
+
+def vote_detail(request, pk):
+    voter = Voter.objects.get(pk=pk)
+    if voter is None:
+        context = {'error':'voter not found'}
+        return render(request,'index.html',context=context)
+    else:
+        context = {'voter': voter}
+        return render(request,'vote_detail.html',context=context)
+
+def increment_voter_one(request,pk):
+    voter = Voter.objects.get(pk=pk)
+    if voter is None:
+        context = {'error':'Object not found','voter':voter}
+    else:
+        voter.voter_one_count += 1
+        voter.save()
+        context = {'success': 'Thank you for voting','voter':voter}
+    return render(request,'vote_detail.html',context=context)
+
+def increment_voter_two(request,pk):
+    voter = Voter.objects.get(pk=pk)
+    if voter is None:
+        context = {'error':'Object not found','voter':voter}
+    else:
+        voter.voter_two_count += 1
+        voter.save()
+        context = {'success': 'Thank you for voting','voter':voter}
+    return render(request,'vote_detail.html',context=context)
+
+@login_required
+def my_voters(request):
+    user = request.user
+    voter = Voter.objects.filter(user=user)
+    print("size is"+str(len(voter)))
+    if voter is None:
+        context = {'error':'Error loading data from user. Do you have any voters registered?'}
+    else:
+        context = {'voters':voter}
+    return render(request,'my_voters.html',context=context)

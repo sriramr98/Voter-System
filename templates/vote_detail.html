@@ -1,19 +1,40 @@
+{% extends "base.html" %}
+
+{% block style %}
 <style>
   .container{
     width: 500px;
   }
 </style>
+{% endblock %}
+
+
+{% block content %}
 
 <div class="container">
-  <p class="display-4">Whom do you like more?</p>
+  {% if error %}
+  <div class="alert alert-danger">
+    {{error}}
+  </div>
+  {% endif %}
+  {% if success %}
+  <div class="alert alert-success">
+    {{success}}
+  </div>
+  {% endif %}
+  <p class="display-4">{{voter.description}}</p>
   <div class="row">
     <div class="col">
-      <div class="text-muted">Pepsi</div>
-      <a href="#" class="btn btn-primary">Vote</a>
+      <div class="text-muted">{{voter.voter_one}}</div>
+      <div>Votes : {{voter.voter_one_count}}</div>
+      <a href="{% url 'increment_voter_one' voter.pk%}" class="btn btn-primary">Vote</a>
     </div>
     <div class="col">
-      <div class="text-muted">Coca Cola</div>
-      <a href="#" class="btn btn-primary">Vote</a>
+      <div class="text-muted">{{voter.voter_two}}</div>
+      <div>Votes: {{voter.voter_two_count}}</div>
+      <a href="{% url 'increment_voter_two' voter.pk%}" class="btn btn-primary">Vote</a>
     </div>
   </div>
 </div>
+
+{% endblock %}

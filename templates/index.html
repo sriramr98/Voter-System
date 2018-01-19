@@ -15,7 +15,7 @@
       <div class="card-text">
         {{vote.voter_one}} vs {{vote.voter_two}}
       </div>
-        <a href="#" class="mt-3 mx-auto btn btn-primary">Vote</a>
+        <a href="{% url 'vote-detail' vote.pk%}" class="mt-3 mx-auto btn btn-primary">Vote</a>
     </div>
   </div>
 </div>
